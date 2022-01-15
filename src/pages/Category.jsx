@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { collection, getDocs, doc, query, where, orderBy, limit, startAfter } from "firebase/firestore";
+import { collection, getDocs, doc, query, where, orderBy, limit } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
@@ -11,6 +11,8 @@ const [listings, setListings] = useState(null);
 const [loading, setLoading] = useState(true);
 
 const params = useParams();
+
+
 
 useEffect(() => {
     const fetchListings = async () => {
@@ -72,6 +74,7 @@ useEffect(() => {
                             listing={listing.data}
                             id={listing.id}
                             key={listing.id}
+                            
                         />
                     ))}
                 </ul>

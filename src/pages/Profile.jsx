@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getAuth, updateProfile } from   "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 //fuctions to update user
 import { updateDoc, doc } from "firebase/firestore";
@@ -8,8 +8,11 @@ import { updateDoc, doc } from "firebase/firestore";
 //db
 import { db } from "../firebase.config";
 
-//notofications from toastify
+//notifications from toastify
 import { toast } from "react-toastify";
+//imgs and icons
+import arrowRight from "../assets/svg/keyboardArrowRightIcon.svg";
+import homeIcon from "../assets/svg/homeIcon.svg";
 
 function Profile () {
   const auth = getAuth();
@@ -92,6 +95,13 @@ function Profile () {
                   />
                 </form>
               </div>
+
+              <Link to="/create-listing" className="createListing">
+              <img src={homeIcon} alt="home" />
+              <p>Sell or rent your home</p>
+              <img src={ arrowRight } alt="arrow right"></img>
+
+              </Link>
               <p className="changePersonalDetails"
               onClick={ ()=>{
                 changeDetails && onSubmit()
