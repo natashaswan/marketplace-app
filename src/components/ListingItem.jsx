@@ -44,7 +44,7 @@ function ListingItem( {listing, id} ) {
                     <img src={bedIcon} alt="bed" />
                     <p className="categoryListingInfoText">
                         {listing.bedrooms > 1 
-                        ? `${listing.bedroom} Bedrooms`
+                        ? `${listing.bedrooms} Bedrooms`
                         : "1 Bedroom"}
                     </p>
 
