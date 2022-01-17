@@ -10,11 +10,11 @@ import {
     uploadBytesResumable,
     getDownloadURL,
   } from "firebase/storage";
-
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 // db 
 import { db } from "../firebase.config";
 import { v4 as uuidv4 } from "uuid";
-//error handling
+//error notifications
 import { toast } from "react-toastify";
 
 function CreateListing() {
@@ -86,16 +86,17 @@ function CreateListing() {
         return
     }
 
-    //store images in db
+    //store images in db function
     const storeImage = async (image) => {
 
     return new Promise((resolve, reject)=>{
         const storage = getStorage();
-        const fileName = `${auth.currentUser.uid}-${image.name}-$
-        {uuidv4()}`;
+        const fileName = `${auth.currentUser.uid}-${uuidv4()}-${image.name}`;
+        console.log(fileName);
 
+             //create reference to storage  
         const storageRef = ref(storage, "images/" + fileName);
-
+        console.log(storageRef);
         const uploadTask = uploadBytesResumable(storageRef, image);
         
         uploadTask.on('state_changed', 
@@ -116,18 +117,18 @@ function CreateListing() {
             }
         }, 
         (error) => {
-        reject(error)    
+          reject(error)    
         }, 
-    () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    resolve(downloadURL)
+        () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        resolve(downloadURL)
+        });
+      });
     });
     }
-    );
-    })
-    }
+        //Array of Uploaded imgs
     const imageUrls = await Promise.all(
         [...images].map((image) => storeImage(image))
       ).catch(() => {
@@ -135,8 +136,22 @@ function CreateListing() {
         toast.error('Images not uploaded')
         return
       })
-      console.log(imageUrls);
+      
+      const formDataCopy = {
+        ...formData,
+        imageUrls,
+        timestamp: serverTimestamp()
+      }
+
+      delete formDataCopy.images;
+      delete formDataCopy.address;
+      !formDataCopy.offer && delete formDataCopy.discountedPrice
+      
+      const docRef = await addDoc(collection(db, "listings"),
+      formDataCopy)
       setLoading(false)
+      toast.success("Listing saved");
+      navigate(`/category/${ formDataCopy.type }/${docRef.id}`)
     }
 
     const onMutate = (e) =>{
