@@ -117,6 +117,7 @@ function CreateListing() {
             }
         }, 
         (error) => {
+          console.log(error)
           reject(error)    
         }, 
         () => {
