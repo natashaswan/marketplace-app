@@ -28,6 +28,8 @@ The app allows users to browse property listings for rent and sale. User can reg
 - **Edit listing page** opens a form that is pre-filled with existing property info except for images. Images field is required. Currently there is no way to update images, but user can upload more. 
 - **Contact seller** 
 - **Forgot password** 
+- **Sign-in page** 
+- **Sign-in with Google**
 
 ## Features
 
