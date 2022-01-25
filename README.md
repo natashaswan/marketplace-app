@@ -9,7 +9,7 @@ ___
     - [Status: complete, this is a tutorial version with minor chages.](#status-complete-this-is-a-tutorial-version-with-minor-chages)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
-  - [App structure](#app-structure)
+  - [App structure with some screenshots](#app-structure-with-some-screenshots)
   - [Features](#features)
   - [Some tech specs](#some-tech-specs)
   - [Improvement Opportunities and known bugs](#improvement-opportunities-and-known-bugs)
@@ -21,17 +21,38 @@ ___
   - [Special Thanks](#special-thanks)
 
 ---
-## Description
+## Description 
 The app allows users to browse property listings for rent and sale. User can register with Google mail or on the website using a form. Registered users can add listings, edit and delete them. 
 
-## App structure
+## App structure with some screenshots
 - **Homepage** with a navigation menu, carousel of newly added listings and two category links.
+  
+![homepage](homepage.gif)
+
 - **Category/rent(sale).** Listings of property for rent, three per page with a "load more" button at the end of the list. Clicking on a listing opens the listing's page. 
+
+![category page](categories.gif)
+
 - **Listing's page** with a carousel of property images and property information. At the bottom of the page, there is a location map (map currently not active). The share button at the top right corner lets user copy the listing's link. 
 - **Offers page** has listings that have discounted price set to true. Three listings per page with an ability to load more by clicking the "load more" button. 
 - **Profile page** with personal details section that has registered user's email and used name. User can update their name by clicking the "update name" button below the personal details section. The button activates the name field and lets user type in it. "Sell or Rent your home" button which takes user on the create listing page. Your listings section has all listings  posted by the user. The delete button lets user delete the listing. The edit button takes user to the update listing page.
+
+![profile page](profile.gif)
+
 - **Create listing page** with toggle-buttons for choosing between sell/rent, parking spot?, furnished?, offer?; text fields for title, address and price; images section lets user upload images. Many fields are required. Pressing "Save Listing" saves the listing in the firestore database. Success/error msg notifies user about the progress. 
+
+![create-listing](create-listing.gif)
+
 - **Edit listing page** opens a form that is pre-filled with existing property info except for images. Images field is required. Currently there is no way to update images, but user can upload more. 
+
+- **Contact seller** 
+- **Forgot password** 
+- **Sign-in page** 
+
+![sign-in page](sign-in.gif)
+
+- **Sign-in with Google**
+- **Create Profile**
 
 ## Features
 
@@ -61,6 +82,7 @@ The app allows users to browse property listings for rent and sale. User can reg
 3. Edit listing: if images not uploaded edit listing will not work. 
 4. Add indication and perhaps list of uploaded images when editing listing.
 5. Uploading two identical images are currently possible with the user not being able to see what they upload.
+6. Contact buyer form currently not sending.
 
 
 ## Technologies used
@@ -98,7 +120,7 @@ The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
 ## Special Thanks
-Boilerplate, Style and app architecture credit goes to [@bradtraversy](https://github.com/bradtraversy). Another huge thank you for support goes to [@WillAdams](https://github.com/bushblade)
+Boilerplate, Style and app architecture credit goes to [@bradtraversy](https://github.com/bradtraversy). Another huge thank you for support goes to [@WillAdams](https://github.com/bushblade).
 
 
 
