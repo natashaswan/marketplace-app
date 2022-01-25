@@ -5,11 +5,20 @@
 ### Status: complete, this is a tutorial version with minor chages.
 ___
 ## Table of Contents
-1. [Description](#description)
-2. [Features](#features)
-3. [Installation Requirements](#installation-requirements)
-4. [Improvement Opportunities and known bugs](#improvement-opportunities)
-5. [Technologies Used](#technologies-used)
+- [Marketplace web app and React.js/Firebase v9/Firestore Application](#marketplace-web-app-and-reactjsfirebase-v9firestore-application)
+    - [Status: complete, this is a tutorial version with minor chages.](#status-complete-this-is-a-tutorial-version-with-minor-chages)
+  - [Table of Contents](#table-of-contents)
+  - [Description](#description)
+  - [App structure](#app-structure)
+  - [Features](#features)
+  - [Some tech specs](#some-tech-specs)
+  - [Improvement Opportunities and known bugs](#improvement-opportunities-and-known-bugs)
+  - [Technologies used](#technologies-used)
+    - [Dependencies:](#dependencies)
+  - [Installation Requirements](#installation-requirements)
+    - [Available Scripts](#available-scripts)
+    - [`npm start`](#npm-start)
+  - [Special Thanks](#special-thanks)
 
 ---
 ## Description
@@ -55,18 +64,28 @@ The app allows users to browse property listings for rent and sale. User can reg
 
 
 ## Technologies used
-1. HTML
-2. CSS
-3. JavaScript
-4. Firebase
-5. Firestore
-6. React
+
+### Dependencies:
+- Front-end:
+  - React
+  - React-router-dom
+  - Browser Router
+  - Swiper React
+  - React toastify
+  - React icons
+  - Swiper
+
+- Back-end:
+  - Firebase
+  - Firestore
+  - Firestore/storage
+  - Firebase/auth
 
 ## Installation Requirements
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Available Scripts
 
 In the project directory, you can run:
 

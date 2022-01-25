@@ -10,7 +10,7 @@ import {
     uploadBytesResumable,
     getDownloadURL,
   } from "firebase/storage";
-import { doc, updateDoc, serverTimestamp, getDoc, arrayUnion, } from "firebase/firestore";
+import { doc, updateDoc, serverTimestamp, getDoc } from "firebase/firestore";
 // db 
 import { db } from "../firebase.config";
 import { v4 as uuidv4 } from "uuid";

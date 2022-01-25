@@ -20,7 +20,7 @@ function ExploreSlider() {
     const navigate = useNavigate();
 
     useEffect(()=>{
-
+         // eslint-disable-next-line react-hooks/exhaustive-deps
         const fetchListings = async () => {
             const listingsRef = collection(db, "listings");
             const q = query(listingsRef, orderBy("timestamp", "desc"),
