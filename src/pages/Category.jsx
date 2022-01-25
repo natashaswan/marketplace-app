@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { collection, getDocs, doc, query, where, orderBy, limit, startAfter } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy, limit, startAfter } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
@@ -25,7 +25,7 @@ useEffect(() => {
                 listingsRef,
                 where("type", "==", params.categoryName),
                 orderBy("timestamp", "desc"),
-                limit(8)
+                limit(3)
             )
             //execute query
             const querySnapshot = await getDocs(q);
@@ -68,7 +68,7 @@ const onFetchMoreListings = async () => {
             where("type", "==", params.categoryName),
             orderBy("timestamp", "desc"),
             startAfter(lastFetchedListing),
-            limit(10)
+            limit(1)
         )
         //execute query
         const querySnapshot = await getDocs(q);

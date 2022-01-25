@@ -1,13 +1,13 @@
+//react functions
 import { useState, useEffect } from "react";
-import { getAuth, updateProfile } from   "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
+//firebase functions
+import { getAuth, updateProfile } from   "firebase/auth";
 import ListingItem from "../components/ListingItem";
 //fuctions to update user
 import { updateDoc, doc, collection, getDocs, where, orderBy, query, deleteDoc } from "firebase/firestore";
-
 //db
 import { db } from "../firebase.config";
-
 //notifications from toastify
 import { toast } from "react-toastify";
 //imgs and icons
@@ -71,7 +71,7 @@ function Profile () {
         await updateProfile(auth.currentUser, {
           displayName: name
         })
-        //Update in firestore
+        //update in firestore
         const userRef = doc(db, "users", auth.currentUser.uid)
         await updateDoc(userRef, {
           name: name

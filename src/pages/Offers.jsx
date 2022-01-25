@@ -1,9 +1,14 @@
+//react functions
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { collection, getDocs, doc, query, where, orderBy, limit, startAfter } from "firebase/firestore";
+//firebase functions
+import { collection, getDocs, query, where, orderBy, limit, startAfter } from "firebase/firestore";
 import { db } from "../firebase.config";
+//success/error notification
 import { toast } from "react-toastify";
+//load icon
 import Spinner from "../components/Spinner";
+//app components
 import ListingItem from "../components/ListingItem";
 
 function Offers() {
@@ -25,7 +30,7 @@ useEffect(() => {
                 listingsRef,
                 where("offer", "==", true),
                 orderBy("timestamp", "desc"),
-                limit(1)
+                limit(3)
             )
             //execute query
             const querySnapshot = await getDocs(q);
