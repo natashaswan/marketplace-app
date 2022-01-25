@@ -30,6 +30,7 @@ The app allows users to browse property listings for rent and sale. User can reg
 - **Forgot password** 
 - **Sign-in page** 
 - **Sign-in with Google**
+- **Create Profile**
 
 ## Features
 
