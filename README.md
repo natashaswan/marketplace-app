@@ -58,21 +58,22 @@ The app allows users to browse property listings for rent and sale. User can reg
 
 
 ## Technologies used
-###Dependencies:
-Front-end:
--- React
--- React-router-dom
--- Browser Router
--- Swiper React
--- React toastify
--- React icons
--- Swiper
 
-Back-end:
--- Firebase
--- Firestore
--- Firestore/storage
--- Firebase/auth
+### Dependencies:
+- Front-end:
+  - React
+  - React-router-dom
+  - Browser Router
+  - Swiper React
+  - React toastify
+  - React icons
+  - Swiper
+
+- Back-end:
+  - Firebase
+  - Firestore
+  - Firestore/storage
+  - Firebase/auth
 
 ## Installation Requirements
 
