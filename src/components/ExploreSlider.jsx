@@ -43,6 +43,10 @@ function ExploreSlider() {
         return <Spinner />
     };
 
+    if (listings.length === 0){
+      return <>no images were uploaded for this listing</>
+    }
+
     return (
         listings && (
             <>

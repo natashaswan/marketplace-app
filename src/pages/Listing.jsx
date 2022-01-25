@@ -4,8 +4,6 @@ import { getDoc, doc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase.config";
 import shareIcon from "../assets/svg/shareIcon.svg";
-
-
 // slider
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,6 +15,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 //spinner when loading
 import Spinner from "../components/Spinner";
 import ExploreSlider from "../components/ExploreSlider";
+
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
 function Listing() {
@@ -48,21 +47,21 @@ function Listing() {
     return (
         <main>
             <Swiper slidesPerView={1} pagination={{clickable: true}}>
-                { listing.imageUrls.map((url,index) => {
+                { listing.imageUrls.map((url,index) => (
                     <SwiperSlide key={ index }>
                         <div 
                             style={{
-                            background: `url(${listing.imageUrls[index]})
-                            center no-repeat`,
+                            background: `url(${listing.imageUrls[index]}) center no-repeat`,
                             backgroundSize: "cover",
                             }} 
                             className="swiperSlideDiv"
-                            ></div>
+                            >
+                        </div>
                     </SwiperSlide>
-                }) }
+                )) }
             </Swiper>
 
-
+        {/* share listing icon */}
             <div className="shareIconDiv" onClick={()=>{
                 navigator.clipboard.writeText(window.location.href)
                 setShareLinkCopied(true)
@@ -75,6 +74,7 @@ function Listing() {
 
             {shareLinkCopied && <p className="linkCopied">Link Copied!</p>}
         
+        {/* price in listing */}
         <div className="listingDetails">
             <p className="listingName">
                 {listing.name} - ${listing.offer
@@ -85,10 +85,16 @@ function Listing() {
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </p>
+        
+        {/* location in listing */}
             <p className="listingLocation">{ listing.location }</p>
+       
+        {/* rent? or sale? */}   
             <p className="listingType">
                 For { listing.type === "rent" ? "Rent" : "Sale" }
             </p>
+
+        {/* offer? */}
             {listing.offer && (
                 <p className="discountPrice">
                     ${ listing.regularPrice - listing.discountedPrice }
@@ -96,6 +102,7 @@ function Listing() {
                 </p>
             )}
 
+        {/* number of bedrooms in listing */}
             <ul className="listingDetails">
                 <li>
                     {  listing.bedrooms > 1 
@@ -103,24 +110,26 @@ function Listing() {
                     : "1 Bedroom"}
                 </li>
 
+        {/* number of bathrooms in listing */}
                 <li>
                     {  listing.bathrooms > 1 
                     ? `${ listing.bathrooms } Bathrooms`
                     : "1 Bathroom"}
                 </li>
-
+         {/* parking? */}
                 <li>
                     {  listing.parking 
                     && "Parking spot" }
                 </li>
-
+         {/* furnished?*/}
                 <li>
                     {  listing.furnished 
                     && "Furnished" }
                 </li>
             </ul>
+            
             <p className="listingLocationTitle">Location</p>
-            {/*map*/}
+        {/*map*/}
             <div className='leafletContainer'>
 
           <MapContainer
@@ -157,4 +166,4 @@ function Listing() {
     )
 }
 
-export default Listing
+export default Listing;

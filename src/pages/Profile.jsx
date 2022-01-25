@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getAuth, updateProfile } from   "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
-
+import ListingItem from "../components/ListingItem";
 //fuctions to update user
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, collection, getDocs, where, orderBy, query, deleteDoc } from "firebase/firestore";
 
 //db
 import { db } from "../firebase.config";
@@ -15,6 +15,9 @@ import arrowRight from "../assets/svg/keyboardArrowRightIcon.svg";
 import homeIcon from "../assets/svg/homeIcon.svg";
 
 function Profile () {
+  const [listing, setListing] = useState(null);
+  const [loading, setLoading] = useState(true);
+    
   const auth = getAuth();
 
   const [changeDetails, setChangeDetails] = useState(false);
@@ -27,6 +30,33 @@ function Profile () {
   const { name, email } = formData;
 
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    
+    const fetchUserListings = async () => {
+      const listingsRef = collection(db, "listings");
+
+      const q = query(
+        listingsRef,
+        where("userRef", "==", auth.currentUser.uid),
+        orderBy("timestamp", "desc")
+      );
+
+      const querySnap = await getDocs(q);
+
+      const listings = [];
+
+      querySnap.forEach((doc) => {
+        return listings.push({
+          id: doc.id,
+          data: doc.data()
+        })
+      })
+      setListing(listings);
+      setLoading(false);
+    }
+    fetchUserListings();
+  }, [auth.currentUser.uid])
 
   const onLogout = () => {
      auth.signOut();
@@ -53,6 +83,17 @@ function Profile () {
       toast.error("Something went wrong")
      }
    }
+    const onDelete = async (listingId)=> {
+      if(window.confirm("Are you sure you want to delete?")) {
+        await deleteDoc(doc(db, "listings", listingId));
+        const updatedListings = listing.filter((listing) =>
+        listing.id !== listingId);
+        setListing(updatedListings);
+        toast.success("Successfully deleted listing")
+      }
+    }
+
+    const onEdit = (listingId) => navigate(`/edit-listing/${listingId}`)
 
     const onChange = (e) =>{
       setFormData((prevState)=>({
@@ -95,6 +136,14 @@ function Profile () {
                   />
                 </form>
               </div>
+               {/* change profile info */}
+               <p className="changePersonalDetails"
+              onClick={ ()=>{
+                changeDetails && onSubmit()
+                setChangeDetails((prevState)=> !prevState)
+              } }>
+              { changeDetails ? "done" : "update name" }
+            </p>
 
               <Link to="/create-listing" className="createListing">
               <img src={homeIcon} alt="home" />
@@ -102,13 +151,27 @@ function Profile () {
               <img src={ arrowRight } alt="arrow right"></img>
 
               </Link>
-              <p className="changePersonalDetails"
-              onClick={ ()=>{
-                changeDetails && onSubmit()
-                setChangeDetails((prevState)=> !prevState)
-              } }>
-              { changeDetails ? "done" : "update name" }
-            </p>
+              {/* this user's listings */}
+              {!loading && listing.length > 0 && (
+                <>
+                  <p className="listingText">
+                    Your Listings
+                  </p>
+                  <ul className="lisingsList">
+                    {listing.map((listing)=>(
+                      <ListingItem 
+                        key={ listing.id } 
+                        listing={ listing.data } 
+                        id={ listing.id } 
+                        onDelete={ ()=>onDelete(listing.id)} 
+                        onEdit={ ()=>onEdit(listing.id)}>
+                      </ListingItem>
+                    ))}
+                  </ul>
+                </>
+              )}
+
+             
         </main>
       </div>
       

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 //load icon
 import Spinner from "../components/Spinner";
 //firestore storage for uploading images
@@ -10,16 +10,17 @@ import {
     uploadBytesResumable,
     getDownloadURL,
   } from "firebase/storage";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { doc, updateDoc, serverTimestamp, getDoc, arrayUnion, } from "firebase/firestore";
 // db 
 import { db } from "../firebase.config";
 import { v4 as uuidv4 } from "uuid";
-//error notifications
+//error/success notifications
 import { toast } from "react-toastify";
 
-function CreateListing() {
+function EditListing() {
     const [geolocationEnabled, setGeolocationEnabled] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [listing, setListing] = useState(false);
     const [formData, setFormData] = useState({
         type: "rent",
         name: "",
@@ -31,10 +32,11 @@ function CreateListing() {
         offer: false,
         regularPrice: 0,
         discountedPrice: 0,
-        images: {},
+        images: [],
         latitude: 0,
         longitude: 0,
     })
+    //destructuring formData
     const {type, 
            name, 
            bedrooms, 
@@ -53,14 +55,47 @@ function CreateListing() {
     const auth = getAuth();
     const navigate = useNavigate();
     const isMounted = useRef(true);
+    const params = useParams();
 
+//redirect if listing is not user's
+useEffect(() => {
+    if(listing && listing.userRef !== auth.currentUser.uid){
+        toast.error("You can not edit that listing")
+        navigate("/")
+    }
+})
+
+//fetches listing to edit
+    useEffect(()=> {
+        setLoading(true)
+        const fetchUserListings = async () => {
+            const docRef = doc(db, "listings", params.listingId);
+            const docSnapShot = await getDoc(docRef);
+            
+            if (docSnapShot.exists()) {
+                setListing(docSnapShot.data());
+                //console.log(docSnapShot.data().imageUrls);
+                setFormData({ ...docSnapShot.data(), address: docSnapShot.data().location})
+                //console.log(images)
+                setLoading(false);
+            } else {
+                navigate("/");
+                toast.error("Listing does not exist");
+            }
+        } 
+        fetchUserListings();
+        
+    },[params.listingId, navigate])
+    
+    const oldImages = formData.imageUrls;
+    
+//sets userRef to logged in user
     useEffect(()=>{
         if(isMounted) {
             onAuthStateChanged(auth, (user) => {
                 if(user) {
                     setFormData({...formData, userRef: user.uid})
-                }
-                else {
+                } else {
                     navigate("/sign-in")
                 }
             })
@@ -74,45 +109,50 @@ function CreateListing() {
         e.preventDefault();
         setLoading(true)
 
-    //check input data
+//check input data
+    
     if (discountedPrice >= regularPrice){
-        setLoading(true);
+        setLoading(false);
         toast.error("Discounted must be less than regular price");
         return
     }
-    if (images.length > 6){
-        setLoading(false)
-        toast.error("Max 6 images")
-        return
-    }
+    
+    if (images && images.length > 6){
+            setLoading(false)
+            toast.error("Max 6 images")
+            return
+    } 
+    
+    
 
-    //store images in db function
+//store images in db function
     const storeImage = async (image) => {
 
     return new Promise((resolve, reject)=>{
         const storage = getStorage();
         const fileName = `${auth.currentUser.uid}-${uuidv4()}-${image.name}`;
-        console.log(fileName);
+        //console.log(fileName);
 
-    //create reference to storage  
+//create reference to storage  
         const storageRef = ref(storage, "images/" + fileName);
-        console.log(storageRef);
+        //console.log(storageRef);
         const uploadTask = uploadBytesResumable(storageRef, image);
-    //upload progress indication    
-        uploadTask.on('state_changed', 
-        (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-           
+//upload progress indication        
+        uploadTask.on(
+            'state_changed', 
+            (snapshot) => {
+            const progress = 
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;      
             console.log('Upload is ' + progress + '% done');
             switch (snapshot.state) {
-            case 'paused':
-                console.log('Upload is paused');
-                break;
-            case 'running':
-                console.log('Upload is running');
-                break;
-                default:
-                    break
+                case 'paused':
+                    console.log('Upload is paused');
+                    break;
+                case 'running':
+                    console.log('Upload is running');
+                    break;
+                    default:
+                        break
             }
         }, 
         (error) => {
@@ -120,8 +160,8 @@ function CreateListing() {
           reject(error)    
         }, 
         () => {
-    // Handle successful uploads on complete
-    // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+// handle successful uploads on complete
+// for instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
         resolve(downloadURL)
         });
@@ -129,8 +169,8 @@ function CreateListing() {
     });
     }
     
-    //Array of Uploaded imgs
-    const imageUrls = await Promise.all(
+//array of Uploaded imgs
+    let imageUrls = await Promise.all(
         [...images].map((image) => storeImage(image))
       ).catch(() => {
         setLoading(false)
@@ -138,18 +178,24 @@ function CreateListing() {
         return
       })
       
+      imageUrls = [ ...imageUrls, ...oldImages]
+      
       const formDataCopy = {
         ...formData,
         imageUrls,
         timestamp: serverTimestamp()
       }
-
-      delete formDataCopy.images;
-      //delete formDataCopy.address;
-      !formDataCopy.offer && delete formDataCopy.discountedPrice
       
-      const docRef = await addDoc(collection(db, "listings"),
-      formDataCopy)
+      console.log(formDataCopy);
+      formDataCopy.location = address
+      delete formDataCopy.images;
+      
+      !formDataCopy.offer && delete formDataCopy.discountedPrice;
+      
+//update listing
+      const docRef = doc(db, "listings", params.listingId)
+      console.log(docRef);
+      await updateDoc(docRef, formDataCopy)
       setLoading(false)
       toast.success("Listing saved");
       navigate(`/category/${ formDataCopy.type }/${docRef.id}`)
@@ -157,9 +203,11 @@ function CreateListing() {
 
     const onMutate = (e) =>{
         let boolean = null;
+
         if (e.target.value === "true"){
             boolean = true
         }
+
         if (e.target.value === "false"){
             boolean = false
         }
@@ -167,7 +215,7 @@ function CreateListing() {
         if(e.target.files){
             setFormData((prevState) => ({
                 ...prevState,
-                images: e.target.files
+                images: e.target.files,
             }))
         }
         if(!e.target.files){
@@ -186,7 +234,7 @@ return (
     
     <div className="profile">
         <header>
-            <p className="pageHeader">Create a listing</p>
+            <p className="pageHeader">Edit listing</p>
         </header>
 
         <main>
@@ -217,7 +265,7 @@ return (
                 </button>
                 </div>
 
-{/* ad's title */} 
+{/* listing title */} 
                 <label className="formLabel">Title</label>
                 
                     <input
@@ -379,7 +427,7 @@ return (
                     No
             </button>
         </div>
-{/* regular price */}
+{/* regular/discounted price */}
         
                 <label className='formLabel'>Regular Price</label>
                 <div className="formPriceDiv">
@@ -411,7 +459,7 @@ return (
                 />
             </>
         )}
-
+{/* images */}
         <label className='formLabel'>Images</label>
           <p className='imagesInfo'>
             The first image will be the cover (max 6).
@@ -424,10 +472,10 @@ return (
             max='6'
             accept='.jpg,.png,.jpeg'
             multiple
-            required
+            //required
           />
           <button type='submit' className='primaryButton createListingButton'>
-            Create Listing
+            Edit Listing
           </button>
 
             </form>
@@ -436,4 +484,4 @@ return (
     )
 }
 
-export default CreateListing
+export default EditListing;

@@ -9,10 +9,10 @@ import ListingItem from "../components/ListingItem";
 function Offers() {
 const [listings, setListings] = useState(null);
 const [loading, setLoading] = useState(true);
+//pagination
+const [lastFetchedListing, setLastFetchedListing] = useState(null);
 
 const params = useParams();
-
-
 
 useEffect(() => {
     const fetchListings = async () => {
@@ -25,10 +25,14 @@ useEffect(() => {
                 listingsRef,
                 where("offer", "==", true),
                 orderBy("timestamp", "desc"),
-                limit(10)
+                limit(1)
             )
             //execute query
             const querySnapshot = await getDocs(q);
+
+            //last listing on a page
+            const lastVisible = querySnapshot.docs[querySnapshot.docs.length-1];
+            setLastFetchedListing(lastVisible);
             
             //new array to hold listings
             const listings = [];
@@ -40,7 +44,7 @@ useEffect(() => {
                     id: doc.id,
                     data: doc.data(),
                 })
-            });
+            })
             
             setListings(listings)
             setLoading(false)
@@ -50,7 +54,48 @@ useEffect(() => {
         }
     } 
        fetchListings()
-})
+}, [params.categoryName])
+
+//pagiation, load more
+const onFetchMoreListings = async () => {
+    try{
+        //get a ref from db
+        const listingsRef = collection(db, "listings");
+
+        //create a query
+        const q = query(
+            listingsRef,
+            where("offer", "==", true),
+            orderBy("timestamp", "desc"),
+            startAfter(lastFetchedListing),
+            limit(1)
+        )
+        //execute query
+        const querySnapshot = await getDocs(q);
+        
+        //last listing on a page
+        const lastVisible = querySnapshot.docs[querySnapshot.docs.length-1];
+        setLastFetchedListing(lastVisible);
+
+        //new array to hold listings
+        const listings = [];
+        
+        //pushing listings to the array
+        querySnapshot.forEach((doc) => {
+            // console.log(doc.id, " => ", doc.data());
+            return listings.push({
+                id: doc.id,
+                data: doc.data(),
+            })
+        });
+        
+        setListings((prevState)=>[...prevState, ...listings])
+        setLoading(false)
+    } 
+    catch (error) {
+        toast.error("Could not fetch listings")
+    }
+} 
     
     return (
         <div className="category">
@@ -77,6 +122,12 @@ useEffect(() => {
                 </ul>
             </main>
                 
+            
+        {lastFetchedListing && (
+            <p className="loadMore" onClick={onFetchMoreListings}>
+                Load More
+            </p>
+            )}
             </>
         ) : (<p>There are no current offers</p>)}
         </div>
