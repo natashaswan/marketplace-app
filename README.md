@@ -60,6 +60,7 @@ The app allows users to browse property listings for rent and sale. User can reg
 3. Edit listing: if images not uploaded edit listing will not work. 
 4. Add indication and perhaps list of uploaded images when editing listing.
 5. Uploading two identical images are currently possible with the user not being able to see what they upload.
+6. Contact buyer form currently not sending.
 
 
 ## Technologies used
