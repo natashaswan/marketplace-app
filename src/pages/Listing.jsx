@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getDoc, doc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase.config";
+import { BsShareFill } from 'react-icons/bs';
 import shareIcon from "../assets/svg/shareIcon.svg";
 // slider
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
@@ -69,7 +70,7 @@ function Listing() {
                     setShareLinkCopied(false)
                 }, 2000)
             } }>
-                <img scr={ shareIcon } alt="share icon" />
+                <BsShareFill />
             </div>
 
             {shareLinkCopied && <p className="linkCopied">Link Copied!</p>}
