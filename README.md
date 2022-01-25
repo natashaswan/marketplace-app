@@ -26,6 +26,8 @@ The app allows users to browse property listings for rent and sale. User can reg
 - **Profile page** with personal details section that has registered user's email and used name. User can update their name by clicking the "update name" button below the personal details section. The button activates the name field and lets user type in it. "Sell or Rent your home" button which takes user on the create listing page. Your listings section has all listings  posted by the user. The delete button lets user delete the listing. The edit button takes user to the update listing page.
 - **Create listing page** with toggle-buttons for choosing between sell/rent, parking spot?, furnished?, offer?; text fields for title, address and price; images section lets user upload images. Many fields are required. Pressing "Save Listing" saves the listing in the firestore database. Success/error msg notifies user about the progress. 
 - **Edit listing page** opens a form that is pre-filled with existing property info except for images. Images field is required. Currently there is no way to update images, but user can upload more. 
+- **Contact seller** 
+- **Forgot password** 
 
 ## Features
 
