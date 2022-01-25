@@ -6,10 +6,13 @@
 ___
 ## Table of Contents
 1. [Description](#description)
-2. [Features](#features)
-3. [Installation Requirements](#installation-requirements)
-4. [Improvement Opportunities and known bugs](#improvement-opportunities)
-5. [Technologies Used](#technologies-used)
+2. [App Structure](#app-structure)
+3. [Features](#features)
+4. [Some Tech Specs](#some-tech-specs)
+5. [Improvement Opportunities and known bugs](#improvement-opportunities)
+7. [Technologies Used](#technologies-used)
+8. [Installation Requirements](#installation-requirements)
+9. [Special Thanks](#special-thanks)
 
 ---
 ## Description
@@ -66,7 +69,7 @@ The app allows users to browse property listings for rent and sale. User can reg
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Available Scripts
 
 In the project directory, you can run:
 
