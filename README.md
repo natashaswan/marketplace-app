@@ -5,9 +5,7 @@
 ### Status: complete, step-by-step tutorial version with minor changes.
 ___
 ## Table of Contents
-- [Marketplace web app and React.js/Firebase v9/Firestore Application](#marketplace-web-app-and-reactjsfirebase-v9firestore-application)
-    - [Status: complete, step-by-step tutorial version with minor changes.](#status-complete-step-by-step-tutorial-version-with-minor-changes)
-  - [Table of Contents](#table-of-contents)
+
   - [Description](#description)
   - [App structure with some screenshots](#app-structure-with-some-screenshots)
   - [Features](#features)
