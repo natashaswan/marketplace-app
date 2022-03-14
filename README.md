@@ -7,7 +7,7 @@ ___
 ## Table of Contents
 
   - [Description](#description)
-  - [App structure with some screenshots](#app-structure-with-some-screenshots)
+  - [App structure with screenshots](#app-structure-with-screenshots)
   - [Features](#features)
   - [Some tech specs](#some-tech-specs)
   - [Improvement Opportunities and known bugs](#improvement-opportunities-and-known-bugs)
@@ -22,7 +22,7 @@ ___
 ## Description 
 This marketplace app allows users to browse property listings for rent and sale and contact the seller/landlord directly through the app. User can register with Google or on the website using a form and list a property for rent or sale. Registered users can add listings, edit and delete them.
 
-## App structure with some screenshots
+## App structure with screenshots
 - **Homepage** with a navigation menu, carousel of newly added listings and two category links.
   
 ![homepage](homepage.gif)
