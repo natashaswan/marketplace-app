@@ -20,34 +20,31 @@ import Navbar from "./components/Navbar";
 function App() {
   return (
     <>
-  <Router>
-    <Routes>
-      <Route path="/" element={ <Explore/> } />
-      <Route path="/offers" element={ <Offers/> } />
-      <Route path="/category/:categoryName" element={ <Category/> } />
-      
-      {/* profile route (Outlet) for logged-in users */}
-     
-      <Route 
-      path="/profile" 
-      element={ <PrivateRoute/> } 
-      >
-        <Route path= "/profile" element={ <Profile /> } />
-      </Route>
+      <Router>
+        <Routes>
+          <Route path="/" element={ <Explore/> } />
+          <Route path="/offers" element={ <Offers/> } />
+          <Route path="/category/:categoryName" element={ <Category/> } />
 
-      <Route path="/sign-in" element={ <SignIn/> } />
-      <Route path="/sign-up" element={ <SignUp/> } />
-      <Route path="/forgot-password" element={ <ForgotPassword/> } />
-      <Route path="/create-listing" element={ <CreateListing/> } />
-      <Route path="/edit-listing/:listingId" element={ <EditListing/> } />
-      <Route path="/category/:categoryName/:listingId" element={ <Listing/> } />
-      <Route path="/contact/:landlordId" element={ <Contact/> } />
-    </Routes>
-      <Navbar/>
-  </Router>
-  <ToastContainer/>
+          {/* profile route (Outlet) for logged-in users */}
+
+          <Route 
+          path="/profile" 
+          element={ <PrivateRoute/> } 
+          >
+            <Route path= "/profile" element={ <Profile /> } />
+          </Route>
+
+          <Route path="/sign-in" element={ <SignIn/> } />
+          <Route path="/sign-up" element={ <SignUp/> } />
+          <Route path="/forgot-password" element={ <ForgotPassword/> } />
+          <Route path="/create-listing" element={ <CreateListing/> } />
+          <Route path="/edit-listing/:listingId" element={ <EditListing/> } />
+          <Route path="/category/:categoryName/:listingId" element={ <Listing/> } />
+          <Route path="/contact/:landlordId" element={ <Contact/> } />
+        </Routes>
+      </Router>
     </>
-    
     
   );
 }
