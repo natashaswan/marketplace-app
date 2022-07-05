@@ -43,9 +43,10 @@ function App() {
           <Route path="/category/:categoryName/:listingId" element={ <Listing/> } />
           <Route path="/contact/:landlordId" element={ <Contact/> } />
         </Routes>
+      <Navbar/>
       </Router>
-    </>
-    
+      <ToastContainer/>
+    </>    
   );
 }
 
